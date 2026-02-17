@@ -61,8 +61,8 @@ class TestChroot:
             )
         ]
         assert mock_mount.mock_calls == [
-            call(Path("proc-build"), f"{new_root}/proc", "-tproc"),
-            call(new_root / "proc", "--make-rprivate"),
+            call(Path("proc-build"), new_root / "proc", "-tproc"),
+            call(new_root / "proc", None, "--make-rprivate"),
         ]
         assert mock_umount.mock_calls == [
             call(new_root / "proc", "--recursive"),
@@ -104,8 +104,8 @@ class TestChroot:
         mock_process.start.assert_not_called()
 
         assert mock_mount.mock_calls == [
-            call(Path("sys-build"), f"{new_root}/existent", "-tsys"),
-            call(new_root / "existent", "--make-rprivate"),
+            call(Path("sys-build"), new_root / "existent", "-tsys"),
+            call(new_root / "existent", None, "--make-rprivate"),
         ]
         assert mock_umount.mock_calls == [
             call(new_root / "existent", "--recursive"),
@@ -157,10 +157,10 @@ Command '['some', 'command']' returned non-zero exit status 42. (unable to umoun
         mock_process.start.assert_not_called()
 
         assert mock_mount.mock_calls == [
-            call(Path("sys-build"), f"{new_root}/existent", "-tsys"),
-            call(Path("test-build"), f"{new_root}/existent2", "-tsys"),
-            call(new_root / "existent2", "--make-rprivate"),
-            call(new_root / "existent", "--make-rprivate"),
+            call(Path("sys-build"), new_root / "existent", "-tsys"),
+            call(Path("test-build"), new_root / "existent2", "-tsys"),
+            call(new_root / "existent2", None, "--make-rprivate"),
+            call(new_root / "existent", None, "--make-rprivate"),
         ]
         assert mock_umount.mock_calls == [
             call(new_root / "existent2", "--recursive"),
